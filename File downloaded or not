@@ -1,0 +1,30 @@
+ Pages.Project.VerifyFileDownloadedOrNot(expectedFileType);
+ 
+ public Project VerifyFileDownloadedOrNot(string expectedFile)
+        {
+            try
+            {
+                filepath = downloadPath + expectedFile;
+                int waitTime = 10000;
+                while (waitTime > 0)
+                {
+                    System.Threading.Thread.Sleep(5000);
+                    if (File.Exists(filepath))
+                    {
+                        PageBase.WriteLog(Logger.LogLevel.Success, "File:  " + expectedFile + " has been successfully downloaded");
+                        break;
+                    }
+                    waitTime = waitTime - 100;
+                }
+                if (!(File.Exists(filepath)))
+                {
+                    throw new Exception("Unable to see the " + expectedFile + " file even after 5 minutes");
+                }
+            }
+            catch (Exception ex)
+            {
+                PageBase.WriteLog(Logger.LogLevel.Error, "The " + expectedFile + " file has not been downloaded" + ex.Message);
+                throw new Exception("File " + expectedFile + " has not been downloaded, hence we cannot lauch AE" + ex.Message);
+            }
+            return this;
+        }
